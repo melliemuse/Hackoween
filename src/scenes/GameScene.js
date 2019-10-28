@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { CST } from "../CST"
 import { updateDatabase } from '../services/firebaseService';
-import girl from "../assets/sprite-girl.png";
+import girl from "../assets/sprite-girl_laptopIMG.png";
 import { takePhoto } from '../services/sneakyPhotoService';
 import coffeeImg from "../assets/items/coffee.png";
 import bugImg from "../assets/items/bug.png";
@@ -14,6 +14,9 @@ import sGreenImg from "../assets/items/SGREEN.png";
 import nGrayImg from "../assets/items/NGRAY.png";
 import sGrayImg from "../assets/items/SGRAY.png";
 import hackeryBkg from '../assets/background-01.png'
+import spillImg from '../assets/items/Spill.png'
+import birdImg from '../assets/items/Bird.png'
+import pumpkinHeartImg from '../assets/items/Pumpkin4.png'
 
 import lightningImg from '../assets/items/Lightning_Bolt.png'
 
@@ -35,6 +38,9 @@ let coffeeTimer;
 let bugTimer;
 let coffee;
 let bug;
+let bird;
+let spill;
+let pumpkinHeart;
 let cursors;
 let currentColor;
 let hasBug = false;
@@ -106,6 +112,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('SGREEN', sGreenImg);
     this.load.image('NRED', nRedImg);
     this.load.image('SRED', sRedImg);
+    this.load.image('pumpkinHeart', pumpkinHeartImg);
     this.load.image('hackeryBkg', hackeryBkg);
     this.load.spritesheet('girl',
       girl,
@@ -153,12 +160,12 @@ export class GameScene extends Phaser.Scene {
 
     // BUG STATUS BAR
 
-    bug1 = this.add.image(1000, 35, 'bug').setDepth(2);
-    bug1.setVisible(false);
-    bug2 = this.add.image(1075, 35, 'bug').setDepth(2);
-    bug2.setVisible(false);
-    bug3 = this.add.image(1150, 35, 'bug').setDepth(2);
-    bug3.setVisible(false);
+    bug1 = this.add.image(1000, 75, 'pumpkinHeart').setDepth(2);
+    bug1.setVisible(true);
+    bug2 = this.add.image(1075, 75, 'pumpkinHeart').setDepth(2);
+    bug2.setVisible(true);
+    bug3 = this.add.image(1150, 75, 'pumpkinHeart').setDepth(2);
+    bug3.setVisible(true);
 
     // NSS SYMBOL BAR
     // N Colors
@@ -313,12 +320,23 @@ function bugItemGenerator() {
     setTimeout(() => currentSpeed = 250, 3000);
     // healthCounter--
     bug.disableBody(true, true)
-    if (bugCount === 1) {
+    if (bugCount === 0) {
       bug1.setVisible(true);
-    } else if (bugCount === 2) {
       bug2.setVisible(true);
+      bug3.setVisible(true);
+    }
+    if (bugCount === 1) {
+      bug1.setVisible(false);
+      bug2.setVisible(true);
+      bug3.setVisible(true);
+    } else if (bugCount === 2) {
+      bug1.setVisible(false);
+      bug2.setVisible(false);
+      bug3.setVisible(true);
     } else if (bugCount === 3) {
-      bug3.setVisible(true)
+      bug3.setVisible(false)
+      bug3.setVisible(false)
+      bug3.setVisible(false)
     }
   }
 }
@@ -332,6 +350,8 @@ function coffeeEffect(coffee) {
   currentSpeed = 1000;
   setTimeout(() => currentSpeed = 250, 4000);
 }
+
+function coffeeSpill(coffee, )
 
 //Lighnting Bolt
 function lightningGenerator() {
@@ -388,9 +408,7 @@ function updateScoreboard(letter) {
     scoreboard.WIN = true;
     console.log(scoreboard)
     console.log("Three Matches");
-    setTimeout(() => {
-      takePhoto();
-    }, 2000);
+    takePhoto();
   }
 
   function resetScoreboard() {
